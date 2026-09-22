@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="theme-color" content="#f5f2ec" />
+  <meta name="description" content="Shift helps you plan what’s next, navigate what happened, and support the people you care about." />
+  <title>Shift — Life, in motion</title>
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="grain" aria-hidden="true"></div>
+  <header class="topbar">
+    <button class="brand" id="brandButton" aria-label="Go to Shift home">
+      <span class="brand-orb">S</span><span>Shift</span>
+    </button>
+    <div class="top-context" id="topContext">Life, in motion</div>
+    <nav class="top-actions" aria-label="Primary">
+      <button class="text-button" id="openFaq">FAQ</button>
+      <button class="text-button" id="openLife">My life</button><button class="text-button" id="openAccount">Account</button>
+      <button class="solid-button small" id="newShiftTop">+ New shift</button>
+    </nav>
+  </header>
+
+  <main id="app" class="app"></main>
+
+  <aside class="command-shell" id="commandShell" aria-label="Shift composer">
+    <div class="local-note"><span class="local-dot"></span><span>Local-first: this version keeps your entries on this device.</span><button type="button" id="privacyShortcut">Privacy</button></div>
+    <form class="command" id="commandForm">
+      <button type="button" class="command-add" id="newShiftDock" aria-label="Start a new shift">+</button>
+      <textarea id="commandInput" rows="1" placeholder="Tell Shift what changed…" aria-label="Tell Shift what changed"></textarea>
+      <div class="quick-prompts" id="quickPrompts"></div>
+      <button type="submit" class="command-send" aria-label="Send">↗</button>
+    </form>
+  </aside>
+
+  <dialog id="newShiftDialog" class="dialog">
+    <form method="dialog" class="dialog-card create-card" id="newShiftForm">
+      <button type="button" class="dialog-close" data-close="newShiftDialog" aria-label="Close">×</button>
+      <p class="eyebrow">Start a shift</p>
+      <h2>What’s moving in your life?</h2>
+      <p class="dialog-lead">Start with the situation. Shift will shape the plan around it.</p>
+      <div class="privacy-banner"><span>◒</span><div><strong>Private by default</strong><p>Your words stay in this browser on this device in this version. They are not sent to a Shift backend.</p></div></div>
+      <textarea id="situationInput" class="situation-input" rows="4" placeholder="I want to study in Canada next year, understand the real cost, and know what documents I need…" required></textarea>
+      <div class="intent-tabs" role="group" aria-label="What kind of shift is this?">
+        <button type="button" data-intent="plan" class="intent active"><span>↗</span><b>Plan</b><small>Something I want to make happen</small></button>
+        <button type="button" data-intent="navigate" class="intent"><span>≈</span><b>Navigate</b><small>Something happened to me</small></button>
+        <button type="button" data-intent="support" class="intent"><span>♡</span><b>Support</b><small>Someone I care about needs me</small></button>
+      </div>
+      <section id="planFields" class="plan-fields">
+        <div class="field-grid">
+          <label class="field"><span>Target date <em>optional</em></span><input id="targetDate" type="date" /></label>
+          <label class="field"><span>Currency</span><select id="currency"><option value="USD">USD</option><option value="CAD">CAD</option><option value="GBP">GBP</option><option value="EUR">EUR</option><option value="NGN">NGN</option></select></label>
+        </div>
+        <div class="field-grid">
+          <label class="field"><span>Goal amount <em>optional</em></span><input id="goalAmount" type="number" min="0" step="50" placeholder="24000" /></label>
+          <label class="field"><span>Already set aside <em>optional</em></span><input id="savedAmount" type="number" min="0" step="50" placeholder="7200" /></label>
+        </div>
+      </section>
+      <button class="solid-button create-submit" type="submit"><span>Build my shift</span><span>↗</span></button>
+    </form>
+  </dialog>
+
+  <dialog id="lifeDialog" class="dialog side-dialog">
+    <section class="dialog-card life-card">
+      <button type="button" class="dialog-close" data-close="lifeDialog" aria-label="Close">×</button>
+      <p class="eyebrow">Your life right now</p>
+      <h2>Every shift you’re carrying.</h2>
+      <div id="threadList" class="thread-list"></div>
+      <div class="dialog-actions"><button class="outline-button" id="newFromLife">+ Start another shift</button><button class="outline-button" id="exportData">Export my data</button><label class="outline-button file-label">Import data<input id="importData" type="file" accept="application/json" hidden /></label></div>
+    </section>
+  </dialog>
+
+  <dialog id="detailDialog" class="dialog">
+    <section class="dialog-card detail-card">
+      <button type="button" class="dialog-close" data-close="detailDialog" aria-label="Close">×</button>
+      <div id="detailContent"></div>
+    </section>
+  </dialog>
+
+  <dialog id="faqDialog" class="dialog">
+    <section class="dialog-card faq-card">
+      <button type="button" class="dialog-close" data-close="faqDialog" aria-label="Close">×</button>
+      <p class="eyebrow">Privacy & safety</p>
+      <h2>Helpful without pretending to know everything.</h2>
+      <div class="faq-list">
+        <details open><summary>Does Shift save my information?</summary><p>By default, Shift stores your life threads only in this browser on this device. If you explicitly sign in and enable cloud sync, Shift will also copy your state to your dedicated cloud account so it can follow you across devices.</p></details>
+        <details><summary>Can I move my information to another device?</summary><p>Use “Export my data” in My life to download your Shift data as a JSON file. You can import that file on another device. Treat the export as private because it can contain sensitive information.</p></details>
+        <details><summary>Can I delete everything?</summary><p>Yes. “Clear this device” removes all locally stored Shift threads from this browser.</p></details>
+        <details><summary>Is Shift therapy or psychological treatment?</summary><p>No. Shift helps organize a difficult situation and surface practical next steps. It does not diagnose mental-health conditions, provide psychotherapy, or replace a licensed professional.</p></details>
+        <details><summary>Is Shift medical, legal, financial, or immigration advice?</summary><p>No. Shift is a planning and life-navigation tool. For high-stakes decisions, verify requirements with official sources or a qualified professional.</p></details>
+        <details><summary>What if something feels urgent or dangerous?</summary><p>Shift is not an emergency service. If someone may be in immediate danger or needs urgent medical or mental-health care, contact local emergency services or an appropriate crisis service or qualified professional.</p></details>
+      </div>
+      <div class="danger-zone"><div><strong>Clear local Shift data</strong><p>This permanently removes the life threads stored in this browser.</p></div><button class="danger-button" id="clearData">Clear this device</button></div>
+    </section>
+  </dialog>
+
+
+  <dialog id="accountDialog" class="dialog">
+    <section class="dialog-card faq-card">
+      <button type="button" class="dialog-close" data-close="accountDialog" aria-label="Close">×</button>
+      <p class="eyebrow">Account & sync</p>
+      <h2>Local first. Cloud only when you choose it.</h2>
+      <p class="dialog-lead" id="accountStatus">Checking account status…</p>
+      <div id="accountSignedOut">
+        <div class="privacy-banner"><span>◒</span><div><strong>Your local Shift still works without an account.</strong><p>Sign in only if you want optional cloud sync across devices.</p></div></div>
+        <label class="field"><span>Email</span><input id="accountEmail" type="email" placeholder="you@example.com" autocomplete="email"></label>
+        <button class="solid-button create-submit" id="sendMagicLink" type="button">Email me a sign-in link ↗</button>
+      </div>
+      <div id="accountSignedIn" hidden>
+        <div class="privacy-banner"><span>✓</span><div><strong id="signedInEmail">Signed in</strong><p>Cloud sync stays off until you explicitly enable it.</p></div></div>
+        <label class="sync-consent"><input id="cloudSyncToggle" type="checkbox"> <span><strong>Enable encrypted cloud sync</strong><small>Copies your Shift state to your dedicated Shift cloud account so it can follow you across devices.</small></span></label>
+        <div class="dialog-actions"><button class="outline-button" id="pullCloud" type="button">Restore from cloud</button><button class="outline-button" id="pushCloud" type="button">Back up now</button><button class="outline-button" id="signOutAccount" type="button">Sign out</button></div>
+      </div>
+      <p class="cloud-note" id="cloudConfigNote"></p>
+    </section>
+  </dialog>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script src="config.js"></script>
+  <script src="cloud.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
